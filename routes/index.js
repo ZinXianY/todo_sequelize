@@ -14,11 +14,16 @@ const todos = require('./modules/todos')
 //引入 users 模組程式碼
 const users = require('./modules/users')
 
+//引入 auth 模組程式碼
+const auth = require('./modules/auth')
+
 //將網址結構符合 /todos 字串的request 導向 todos 模組並加入驗證程序
 router.use('/todos', authenticator, todos)
 
 //將網址結構符合 /users 字串的request 導向 users 模組
 router.use('/users', users)
+
+router.use('/auth', auth)
 
 //將網址結構符合 / 字串的request 導向 home 模組並加入驗證程序
 router.use('/', authenticator, home)
