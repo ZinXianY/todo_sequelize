@@ -31,4 +31,39 @@ router.get('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//設定 edit 路由
+router.get('/:id/edit', (req, res) => {
+  const UserId = req.user._id
+  const id = req.params.id
+  return Todo.findOne({ id, UserId })
+    .lean()
+    .then(todo => res.render('edit', { todo: todo.get() }))
+    .catch(error => console.log(error))
+})
+
+//修改 Todo 資料
+router.put('/:id', (req, res) => {
+  const UserId = req.user._id
+  const id = req.params.id
+  const { name, isDone } = req.body
+  return Todo.findOne({ where: { id, UserId } })
+    .then(todo => {
+      todo.name = name
+      todo.isDone = isDone === 'on'
+      return todo.save()
+    })
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
+
+//設定 delete 路由
+router.delete('/:id', (req, res) => {
+  const userId = req.user._id
+  const _id = req.params.id
+  return todo.findOne({ _id, userId })
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
 module.exports = router
