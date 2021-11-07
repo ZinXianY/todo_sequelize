@@ -13,9 +13,9 @@ router.get('/new', (req, res) => {
 
 //設定 Create 路由
 router.post('/', (req, res) => {
-  const userId = req.user._id
+  const UserId = req.user.id
   const name = req.body.name
-  return Todo.create({ name, userId })
+  return Todo.create({ name, UserId })
     .then(() => res.redirect('/'))
     .catch(error => console.log('error'))
 })
@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
 
 //設定 edit 路由
 router.get('/:id/edit', (req, res) => {
-  const UserId = req.user._id
+  const UserId = req.user.id
   const id = req.params.id
   return Todo.findOne({ id, UserId })
     .lean()
@@ -43,7 +43,7 @@ router.get('/:id/edit', (req, res) => {
 
 //修改 Todo 資料
 router.put('/:id', (req, res) => {
-  const UserId = req.user._id
+  const UserId = req.user.id
   const id = req.params.id
   const { name, isDone } = req.body
   return Todo.findOne({ where: { id, UserId } })
@@ -58,10 +58,10 @@ router.put('/:id', (req, res) => {
 
 //設定 delete 路由
 router.delete('/:id', (req, res) => {
-  const userId = req.user._id
-  const _id = req.params.id
-  return todo.findOne({ _id, userId })
-    .then(todo => todo.remove())
+  const UserId = req.user.id
+  const id = req.params.id
+  return Todo.findOne({ where: { id, UserId } })
+    .then(todo => todo.destroy())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
